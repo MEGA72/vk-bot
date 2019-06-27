@@ -3,6 +3,7 @@ const vk = new VK({ token: process.env.TOKEN });
 const config = require("./config/config");
 vk.token = config.token;
 const fs = require("fs");
+const Gamedig = require("gamedig");
 
 //поиск команд в папке
 const cmds = fs
@@ -50,7 +51,7 @@ vk.updates.on(["new_message"], async context => {
     await cmd.func(context, { cmds, vk, VK, cmd });
   } catch (e) {
     console.log(`Ошибка:\n${e}`);
-    context.error(`Ошибка при выполнении команды '${context.text}'`);
+    context.send(`Ошибка при выполнении команды '${context.text}'`);
   }
 });
 
