@@ -2,10 +2,10 @@
 // const latitude  = context.geo.coordinates.latitude;
 // const longitude = context.geo.coordinates.longitude;
 const fs = require('fs');
-const userToJson = require('../../geoBd.json')
+const userToJson = require('../../public/geoBd.json')
 
 module.exports = {
-    func: async function(context,senderid,latitude,longitude) {
+    func: async function(context,senderid,latitude,longitude,FirstName,LastName,photo) {
 //сверяем значения ключ ID с ID пользователя
 objIndex = userToJson.features.findIndex((obj => obj.id == senderid));
 
@@ -36,7 +36,7 @@ context.send(`Обновили координаты`)
   },
   properties: {
     balloonContentHeader:
-      `${senderid}`  }
+      `${FirstName} ${LastName} <p> <img src="${photo}"> `}
 }
 
 //добавили в массив объекта
@@ -46,7 +46,7 @@ context.send("Добавили координаты")
 
 
 //записали в файл
-fs.writeFile ('./geoBd.json', JSON.stringify(userToJson), function(err) {
+fs.writeFile ('./public/geoBd.json', JSON.stringify(userToJson), function(err) {
   if (err) throw err;
   console.log('complete');
   }

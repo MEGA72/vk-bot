@@ -28,7 +28,7 @@ vk.updates.on(["new_message"], async context => {
   //проверяем есть ли гео привязка
   if (context.hasGeo) {
     let name = await vk.api.users.get({
-      user_id: context.senderId, fields: "photo_200_orig"
+      user_id: context.senderId, fields: "photo_100"
     });
 
     // context.send(`
@@ -44,7 +44,7 @@ vk.updates.on(["new_message"], async context => {
     
 
     try {
-      await geo.func(context,context.senderId,context.geo.coordinates.latitude,context.geo.coordinates.longitude);
+      await geo.func(context,context.senderId,context.geo.coordinates.latitude,context.geo.coordinates.longitude,name[0].first_name,name[0].last_name,name[0].photo_100);
     } catch (e) {
       console.log(`Ошибка:\n${e}`);
       context.send(`Ошибка при выполнении команды '${context.text}'`);
