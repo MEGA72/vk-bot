@@ -1,15 +1,14 @@
-const Gamedig = require("gamedig");
-var config = require('../../config/servers.json');
+var configServers = require('../../config/servers.json');
 
 module.exports = {
   regexp: /^Все сервера$/i,
-  func: async function(context) {
+  func: async function(context,{Gamedig}) {
     let arrServer = [];
-    for (var key in config) {
+    for (var key in configServers) {
     try {
         let state = await Gamedig.query({
           type: "bf2142",
-          host: config[key],
+          host: configServers[key],
           port: key
         });
         let ask =

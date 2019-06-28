@@ -4,6 +4,7 @@ const config = require("./config/config");
 vk.token = config.token;
 const fs = require("fs");
 const Gamedig = require("gamedig");
+const geo = require("./src/commands/geo.js")
 
 //поиск команд в папке
 const cmds = fs
@@ -23,6 +24,36 @@ vk.updates.on(["new_message"], async context => {
   if (context.senderId < 1 || context.isOutbox) {
     return;
   }
+
+  //проверяем есть ли гео привязка
+  if (context.hasGeo) {
+    let name = await vk.api.users.get({
+      user_id: context.senderId, fields: "photo_200_orig"
+    });
+
+    // context.send(`
+    // данные пользователя для карт
+    // photo_200_orig - ${name[0].photo_200_orig}
+    // first_name - ${name[0].first_name}
+    // last_name - ${name[0].last_name}
+    // senderId - ${context.senderId}
+    // latitude - ${context.geo.coordinates.latitude}
+    // longitude - ${context.geo.coordinates.longitude}
+    // `);
+
+    
+
+    try {
+      await geo.func(context,context.senderId,context.geo.coordinates.latitude,context.geo.coordinates.longitude);
+    } catch (e) {
+      console.log(`Ошибка:\n${e}`);
+      context.send(`Ошибка при выполнении команды '${context.text}'`);
+
+    }
+
+return;
+  }
+
 
   //проверка на прикрепленные файлы
   if (context.attachments.length > 0) {
@@ -48,7 +79,7 @@ vk.updates.on(["new_message"], async context => {
 
   //попытка отправки
   try {
-    await cmd.func(context, { cmds, vk, VK, cmd });
+    await cmd.func(context, { cmds, vk, VK, cmd, Gamedig });
   } catch (e) {
     console.log(`Ошибка:\n${e}`);
     context.send(`Ошибка при выполнении команды '${context.text}'`);
