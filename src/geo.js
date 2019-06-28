@@ -2,7 +2,7 @@
 // const latitude  = context.geo.coordinates.latitude;
 // const longitude = context.geo.coordinates.longitude;
 const fs = require('fs');
-const userToJson = require('../../public/geoBd.json')
+const userToJson = require('../public/geoBd.json')
 
 module.exports = {
     func: async function(context,senderid,latitude,longitude,FirstName,LastName,photo) {
